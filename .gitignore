@@ -1,0 +1,6 @@
+example/
+mysql-server/
+tmp
+.terraform
+.ipynb_checkpoints
+.bundle
