@@ -7,9 +7,11 @@ RUN apt update && apt install -y \
   jq \
   vim \
   unzip \
-  curl
+  curl \
+  ssh
 
-RUN pip3 install awscli
+RUN pip3 install awscli boto3
+
 RUN mkdir -p /opt/terraform && \
   cd /opt/terraform && \
   curl -o terraform.zip https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip && \
