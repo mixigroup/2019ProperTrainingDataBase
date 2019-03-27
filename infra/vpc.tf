@@ -109,6 +109,26 @@ resource "aws_security_group" "judge_server" {
 
   ingress {
     from_port = 0
+    to_port = 18080
+    protocol = "tcp"
+    security_groups = [
+      "${aws_security_group.super.id}",
+      "${aws_security_group.user.id}"
+    ]
+  }
+
+  ingress {
+    from_port = 0
+    to_port = 28080
+    protocol = "tcp"
+    security_groups = [
+      "${aws_security_group.super.id}",
+      "${aws_security_group.user.id}"
+    ]
+  }
+
+  ingress {
+    from_port = 0
     to_port = 3306
     protocol = "tcp"
     security_groups = [

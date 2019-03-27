@@ -31,9 +31,18 @@ server/ssh: ~/.ssh/id_db_training
 server: ~/.ssh/id_db_training
 	scp -i ~/.ssh/id_db_training ./Makefile ubuntu@$(SERVER_IP):
 	scp -i ~/.ssh/id_db_training -r ../docker ubuntu@$(SERVER_IP):
+	aws s3 cp s3://mixi-db-training/server/slack.env tmp/slack.env
+	scp -i ~/.ssh/id_db_training ./tmp/slack.env ubuntu@$(SERVER_IP):
+
+	# 簡易採点システムの解答データを上書きする
+	aws s3 cp s3://mixi-db-training/judge/answer.json tmp/answer.json
+	scp -i ~/.ssh/id_db_training ./tmp/answer.json ubuntu@$(SERVER_IP):docker/judge/webapp/answer.json
+
+	# 各種コンテナを走らせる
 	ssh -i ~/.ssh/id_db_training ubuntu@$(SERVER_IP) make server/docker
 	ssh -i ~/.ssh/id_db_training ubuntu@$(SERVER_IP) make server/tutorial_db
 	ssh -i ~/.ssh/id_db_training ubuntu@$(SERVER_IP) make server/benchapp
+	ssh -i ~/.ssh/id_db_training ubuntu@$(SERVER_IP) make server/judge
 
 # サーバーにDockerをインストールする
 .PHONY: server/docker
@@ -59,6 +68,20 @@ server/tutorial_db: /swapfile
 		tutorial_db
 
 # インデックス演習: isucon5qのベンチマークを実行するためのWebアプリ
+.PHONY: server/judge
+server/judge:
+	docker build -t judge ./docker/judge
+	docker run \
+		-d \
+		--rm \
+		-v $(PWD)/docker/judge/webapp:/opt/webapp \
+		-w /opt/webapp \
+		--env-file slack.env \
+		-p 18080:18080 \
+		judge \
+		bundle exec rackup --host 0.0.0.0 --port 18080
+
+# インデックス演習: isucon5qのベンチマークを実行するためのWebアプリ
 .PHONY: server/benchapp
 server/benchapp:
 	docker build -t bench ./docker/bench
@@ -67,6 +90,6 @@ server/benchapp:
 		--rm \
 		-v $(PWD)/docker/bench/webapp:/opt/webapp \
 		-w /opt/webapp \
-		-p 8080:8080 \
+		-p 28080:28080 \
 		bench \
-		bundle exec rackup --host 0.0.0.0 --port 8080
+		bundle exec rackup --host 0.0.0.0 --port 28080
