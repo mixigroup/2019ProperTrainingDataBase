@@ -25,16 +25,20 @@ infra-tools:
 server/ssh: ~/.ssh/id_db_training
 	ssh -i ~/.ssh/id_db_training ubuntu@$(SERVER_IP)
 
-tmp/slack.env:
-	aws s3 cp s3://mixi-db-training/server/slack.env tmp/slack.env
-
 # サーバーのセットアップ
 # Terraformの適用後に実行してください
 .PHONY: server
-server: ~/.ssh/id_db_training tmp/slack.env
+server: ~/.ssh/id_db_training
 	scp -i ~/.ssh/id_db_training ./Makefile ubuntu@$(SERVER_IP):
-	scp -i ~/.ssh/id_db_training ./tmp/slack.env ubuntu@$(SERVER_IP):
 	scp -i ~/.ssh/id_db_training -r ../docker ubuntu@$(SERVER_IP):
+	aws s3 cp s3://mixi-db-training/server/slack.env tmp/slack.env
+	scp -i ~/.ssh/id_db_training ./tmp/slack.env ubuntu@$(SERVER_IP):
+
+	# 簡易採点システムの解答データを上書きする
+	aws s3 cp s3://mixi-db-training/judge/answer.json tmp/answer.json
+	scp -i ~/.ssh/id_db_training ./tmp/answer.json ubuntu@$(SERVER_IP):docker/judge/webapp/answer.json
+
+	# 各種コンテナを走らせる
 	ssh -i ~/.ssh/id_db_training ubuntu@$(SERVER_IP) make server/docker
 	ssh -i ~/.ssh/id_db_training ubuntu@$(SERVER_IP) make server/tutorial_db
 	ssh -i ~/.ssh/id_db_training ubuntu@$(SERVER_IP) make server/benchapp
