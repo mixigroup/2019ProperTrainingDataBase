@@ -8,8 +8,6 @@ SLACK_CHANNEL=ENV['SLACK_CHANNEL']
 ANSWER = JSON.parse(File.read(File.expand_path(File.join(__FILE__, '..', 'answer.json'))))
 
 class App < Sinatra::Base
-  attr_reader :answers
-
   get '/ping' do
     'pong'
   end
