@@ -19,18 +19,15 @@ resource "aws_iam_group" "iam_group" {
   name = "db-training-cloud9-users"
 }
 
-resource "aws_iam_group_membership" "iam_group_memberships" {
+resource "aws_iam_user_group_membership" "iam_user_group" {
   depends_on = [
     "aws_iam_user.iam_users",
     "aws_iam_group.iam_group"
   ]
 
   count = "${length(var.usernames)}"
-  name  = "db-training-cloud9-users-members"
-  users = [
-    "db.${element(var.usernames, count.index)}"
-  ]
-  group = "db-training-cloud9-users"
+  user = "db.${element(var.usernames, count.index)}"
+  groups = ["${aws_iam_group.iam_group.name}"]
 }
 
 resource "aws_iam_group_policy_attachment" "iam_group_policy_attachment" {
