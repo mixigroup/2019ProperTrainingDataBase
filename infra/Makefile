@@ -90,6 +90,7 @@ server/benchapp:
 		--rm \
 		-v $(PWD)/docker/bench/webapp:/opt/webapp \
 		-w /opt/webapp \
+		--env-file slack.env \
 		-p 28080:28080 \
 		bench \
 		bundle exec rackup --host 0.0.0.0 --port 28080
