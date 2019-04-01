@@ -5,7 +5,7 @@ resource "aws_cloud9_environment_ec2" "environments" {
   ]
 
   count         = "${length(var.usernames)}"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   name          = "db.${element(var.usernames, count.index)}"
   description   = "Environment for DB training"
   owner_arn     = "arn:aws:iam::${data.aws_caller_identity.self.account_id}:user/db.${element(var.usernames, count.index)}"
