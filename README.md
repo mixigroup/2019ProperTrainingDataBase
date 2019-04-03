@@ -12,7 +12,7 @@
 
 #### :seedling: チュートリアル
 
-チュートリアルでは AWS Cloud9 上の Jupyter Notebook を利用し実際に SQL クエリを実行しながら基本的な機能について確認します。
+チュートリアルでは MySQL の公式サイトで紹介されている https://github.com/datacharmer/test_db の employees データベースを利用して SQL の基本的な機能について確認していきます。
 
 - [00_HELLO](notebooks/00_HELLO.ipynb)
   - Hello, Jupyter
