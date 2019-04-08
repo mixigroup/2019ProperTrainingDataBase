@@ -10,7 +10,7 @@ resource "aws_instance" "judge_server" {
 
   associate_public_ip_address = true
   ami = "ami-0bbe6b35405ecebdb" # Ubuntu Server 18.04 LTS (HVM), SSD Volume Type (ami-0bbe6b35405ecebdb)
-  instance_type = "t2.nano"
+  instance_type = "t2.medium"
   key_name  = "${aws_key_pair.id_db_training.key_name}"
   subnet_id = "${aws_subnet.main_subnet_1b.id}"
   associate_public_ip_address = true
