@@ -1,0 +1,48 @@
+diff --git a/src/mrblib/handler.rb b/src/mrblib/handler.rb
+index 94b2200..ce591bb 100644
+--- a/src/mrblib/handler.rb
++++ b/src/mrblib/handler.rb
+@@ -11,16 +11,19 @@ class Handler
+   end
+ 
+   def rnd_init
++    puts 'Handler#rnd_init'
+     @iterator = records.each.with_index
+ 
+     return 0
+   end
+ 
+   def rnd_end
++    puts 'Handler#rnd_end'
+     return 0
+   end
+ 
+   def rnd_next
++    puts 'Handler#rnd_next'
+     begin
+       record, current_index = iterator.next
+       @last_index = current_index
+@@ -35,6 +38,7 @@ class Handler
+   end
+ 
+   def write_row
++    puts 'Handler#write_row'
+     columns = []
+     table.each_field do |field|
+       columns.push(field.str)
+@@ -44,6 +48,7 @@ class Handler
+   end
+ 
+   def update_row
++    puts 'Handler#update_row'
+     columns = []
+     table.each_field do |field|
+       columns.push(field.str)
+@@ -54,6 +59,7 @@ class Handler
+   end
+ 
+   def delete_row
++    puts 'Handler#delete_row'
+     iterator.rewind
+     records.delete_at(last_index)
+ 

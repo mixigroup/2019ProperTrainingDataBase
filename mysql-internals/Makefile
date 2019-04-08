@@ -16,3 +16,8 @@ mrbdb:
 .PHONY: build
 build:
 	docker build -t database-training .
+
+# mrbdb: 観察用差分の反映
+.PHONY: observe
+observe:
+	cd mrbdb && git reset --hard && cat ../patch/mrbdb_debug_print.diff | git apply
